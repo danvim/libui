@@ -128,7 +128,7 @@ bool ui::text::TextEngine::render(const std::string &string) {
 }
 
 void ui::text::TextEngine::drawCharacter(char &c, Uint x, Uint y) {
-    //TODO draw character
+    //draw character
     if (font_ptr != nullptr) {
         const FONT_CHAR_INFO& char_info = font_ptr->getCharInfo(c);
         drawCharacter(char_info, x, y);

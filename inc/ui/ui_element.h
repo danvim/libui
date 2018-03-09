@@ -26,7 +26,6 @@ namespace ui {
      */
     class UIElement: public virtual UIBase {
     public:
-        virtual void render();
 
         void setParent(UIElement* ui_element_ptr);
 
@@ -47,8 +46,6 @@ namespace ui {
     protected:
         UIElement() = default;
 
-        uint16_t width = 0;
-        uint16_t height = 0;
         UIElement* parent_ptr = nullptr;
         Layout horizontal_layout = WRAP_CONTENT;
         Layout vertical_layout = WRAP_CONTENT;

@@ -23,3 +23,7 @@ void ui::UIBase::setVisibility(Visibility visibility) {
 ui::Visibility ui::UIBase::getVisibility() {
     return visibility;
 }
+
+void ui::UIBase::render() {
+
+}

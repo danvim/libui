@@ -12,10 +12,6 @@ ui::UIElement *ui::UIElement::getParent() {
     return parent_ptr;
 }
 
-void ui::UIElement::render() {
-
-}
-
 void ui::UIElement::setBackgroundColor(uint16_t color) {
     this->background_color = color;
 }

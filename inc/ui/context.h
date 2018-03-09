@@ -10,6 +10,10 @@
 #include <libsc/joystick.h>
 #include <libsc/battery_meter.h>
 #include <ui/color_schemes/color_scheme.h>
+#include <ui/ui_base.h>
+#include <ui/e.h>
+#include <map>
+#include <functional>
 
 namespace ui {
     class Context {
@@ -27,6 +31,9 @@ namespace ui {
         static libsc::Joystick::State JOYSTICK_DOWN;
         static libsc::Joystick::State JOYSTICK_LEFT;
         static libsc::Joystick::State JOYSTICK_RIGHT;
+        static libsc::Joystick::State JOYSTICK_SELECT;
+
+        static libsc::Joystick::Config joystick_config_base;
 
         static void remap_joystick_directions(
                 libsc::Joystick::State up,
@@ -35,6 +42,12 @@ namespace ui {
                 libsc::Joystick::State right
         );
 
+        /**
+         * Relays all UI listeners to libsccc, so that removing listeners is possible
+         */
+        static std::map<std::pair<Event, std::function<void(E event_obj)>*>, std::function<void(E event_obj)>*>
+                listener_map;
+
         enum RotationalChange {
             NO_TURN,
             QUARTER_CCW,
@@ -42,7 +55,41 @@ namespace ui {
             HALF_TURN
         };
 
-        static void set_joystick_rotation(RotationalChange rotationalChange);
+        /**
+         * Sets rotation of the virtual joystick states. References to the states later on must refer to the states in
+         * Context, e.g. Context::JOYSTICK_UP.
+         *
+         * @param rotationalChange An item of the enum RotationalChange.
+         *
+         * @example This example will change and retrieve the virtual state of the joystick.
+         * @code
+         * Context::setJoystickRotation(QUARTER_CCW);
+         * bool isRight = Context::joystick_ptr->GetState() == Context::JOYSTICK_RIGHT;
+         * @endcode
+         *
+         * @see ui::Context::RotationalChange
+         */
+        static void setJoystickRotation(RotationalChange rotationalChange);
+
+        /**
+         * Prepares listener relays.
+         *
+         * Caution! This will delete and re-instantiate various peripheral pointers.
+         */
+        static void prepareListenerEvents();
+
+        /**
+         * Adds an event listener
+         * @param event
+         * @param cb_ptr
+         */
+        static void addEventListener(Event event, std::function<void(E event_obj)>* cb_ptr);
+
+        static void removeEventListener(Event event, std::function<void(E event_obj)>* cb_ptr);
+
+        static void triggerListeners(Event event, E event_object);
+
+        static libsc::Joystick::Listener joystick_listeners_dispatcher;
     };
 }
 

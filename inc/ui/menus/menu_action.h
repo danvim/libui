@@ -12,6 +12,7 @@
 #include <ui/ui_base.h>
 #include <ui/text_block.h>
 #include <ui/fonts/humanist.h>
+#include <ui/events/life_cycle_events.h>
 
 namespace ui {
     /**
@@ -37,29 +38,19 @@ namespace ui {
      * @endcode
      *
      */
-    class MenuAction: public virtual UIBase {
+    class MenuAction: public virtual UIBase, public events::LifeCycleEvents {
     public:
-
-        enum ExitStatus {
-            SUCCESS = 0,
-            FAILURE
-        };
-
         MenuAction();
 
         virtual int run();
-
-        virtual int onEnter();
-
-        virtual void onExit();
 
         virtual void select();
 
         virtual void deselect();
 
-        virtual void render();
+        void render() override;
 
-        void setName(std::string name);
+        virtual void setName(std::string name);
 
     protected:
         static const uint8_t ITEM_HEIGHT = 18;

@@ -12,11 +12,27 @@
 #include <algorithm>
 #include "text_element.h"
 
-/**
- * TextEngine utilizes an libsc::Lcd object
- */
 namespace ui {
     namespace text {
+        /**
+         * TextEngine utilizes a libsc::Lcd object. The text engine can render text using a specific font file generated
+         * with The Dot Factory with slight modifications. Features include: text wrapping and text color
+         * configurations. This rendering can be further abstracted by utilizing the UI element TextBlock.
+         *
+         * @example
+         * The following program will render a sentence on the screen.
+         * @code
+         * ui::text::TextEngine textEngine;
+         * textEngine.setColor(Lcd::kWhite);
+         * textEngine.setRegion(Lcd::Rect(0, 0, 128, 15));
+         * textEngine.setFont(&ui::fonts::blocky);
+         * textEngine.setTextWrap(ui::text::ELLIPSIS);
+         * textEngine.render("The quick brown fox jumps over a lazy dog.");
+         * @endcode
+         *
+         * @see ui::Font
+         * @see ui::TextBlock
+         */
         class TextEngine: public virtual TextElement {
         public:
 

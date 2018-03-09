@@ -15,18 +15,9 @@ ui::MenuAction::MenuAction() {
 }
 
 int ui::MenuAction::run() {
-    int exit_status = onEnter();
+    onEnter();
     onExit();
-    return exit_status;
-}
-
-int ui::MenuAction::onEnter() {
-    //Override this method to run some other function
     return SUCCESS;
-}
-
-void ui::MenuAction::onExit() {
-
 }
 
 void ui::MenuAction::select() {
@@ -40,7 +31,7 @@ void ui::MenuAction::deselect() {
 void ui::MenuAction::render() {
     Context::lcd_ptr->SetRegion(ui_region);
     Context::lcd_ptr->FillColor(is_selected ? Context::color_scheme.PRIMARY_LIGHTER : Context::color_scheme.BACKGROUND_LIGHT);
-    textBlockName.setRegion(ui_region.x + PADDING, ui_region.y + TEXT_OFFSET, ui_region.w - PADDING * 2, ITEM_HEIGHT);
+    textBlockName.setRegion(ui_region.x + PADDING, ui_region.y + TEXT_OFFSET, ui_region.w - PADDING, ITEM_HEIGHT);
     textBlockName.setText(name);
     textBlockName.render();
 }

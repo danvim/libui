@@ -17,6 +17,9 @@ namespace ui {
 
     class UIBase {
     public:
+
+        virtual void render();
+
         /**
          * Sets the ui region
          * @param rect

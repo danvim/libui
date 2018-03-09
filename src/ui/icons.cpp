@@ -34,7 +34,7 @@ void ui::Icons::drawTriangle(Uint x, Uint y, uint16_t color, ui::Direction direc
 
     for (uint16_t yi = 0; yi < size; yi++) {
         uint16_t x_count = growth[direction].y > 0 ? yi + uint16_t(1) : size - yi;
-        uint16_t x_offset = growth[direction].x > 0 ? size - x_count : x_count;
+        uint16_t x_offset = growth[direction].x > 0 ? size - x_count : (uint16_t) 0;
         Context::lcd_ptr->SetRegion(libsc::Lcd::Rect(x + x_offset, y + yi, x_count, 1));
         Context::lcd_ptr->FillColor(color);
     }

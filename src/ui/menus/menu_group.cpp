@@ -2,9 +2,6 @@
 // Created by Daniel on 17/2/2018.
 //
 
-#include <sstream>
-#include <utility>
-#include <libsc/system.h>
 #include "ui/menus/menu_group.h"
 
 namespace ui {
@@ -13,12 +10,8 @@ namespace ui {
         this->setName(std::move(menu_name));
         this->setRegion(Context::full_screen);
 
-        //Style setup
-        textBlockTitle.setFont(&fonts::humanist);
-        textBlockTitle.setTextWrap(text::ELLIPSIS);
-        textBlockTitle.setColor(Context::color_scheme.BODY);
-        textBlockTitle.setRegion(PADDING, TEXT_OFFSET, Context::full_screen.w - PADDING - BATTERY_METER_WIDTH, 120);
-        textBlockTitle.setText(this->name);
+        toolbar.setRegion(ui_region.x, ui_region.y, ui_region.w, TITLE_BAR_HEIGHT);
+        toolbar.reserveHSpace(16);
 
         textBlockBatteryVoltage.setFont(&fonts::blocky);
         textBlockBatteryVoltage.setTextWrap(text::NO_WRAP);
@@ -33,25 +26,46 @@ namespace ui {
         drawPage();
 
         //Rendering loop
-        bool is_exit = false;
-        libsc::Timer::TimerInt time;
+        libsc::Timer::TimerInt time = libsc::System::Time();
+
+        std::function<void(E)> joystick_handler = [&](E e){
+            if (e.JOYSTICK_STATE == Context::JOYSTICK_UP) {
+                //Select prev item
+                selectPrevAction();
+            } else if (e.JOYSTICK_STATE == Context::JOYSTICK_DOWN) {
+                //Select next item
+                selectNextAction();
+            } else if (e.JOYSTICK_STATE == Context::JOYSTICK_SELECT) {
+                runAction();
+            }
+        };
+
+        Context::addEventListener(Event::JOYSTICK_DOWN, &joystick_handler);
 
         while (!is_exit) {
-            if ((time = libsc::System::Time()) % 300 == 1) {
-                libsc::Joystick::State state = Context::joystick_ptr->GetState();
-                if (state == Context::JOYSTICK_UP) {
-                    //Select prev item
-                    selectPrevAction();
-                } else if (state == Context::JOYSTICK_DOWN) {
-                    //Select next item
-                    selectNextAction();
+            if (time != libsc::System::Time()) {
+                time = libsc::System::Time();
+
+                if (run_action != nullptr) {
+                    Context::removeEventListener(Event::JOYSTICK_DOWN, &joystick_handler);
+                    run_action->run();
+                    run_action = nullptr;
+                    Context::addEventListener(Event::JOYSTICK_DOWN, &joystick_handler);
+
+                    if (is_exit)
+                        break;
+
+                    drawBaseUI();
+                    drawPage();
+                }
+
+                if (time % 1000 == 1) {
+                    drawBatteryMeter();
                 }
             }
-
-            if (time % 1000 == 1) {
-                drawBatteryMeter();
-            }
         }
+
+        Context::removeEventListener(Event::JOYSTICK_DOWN, &joystick_handler);
 
         //Exit preparation
 
@@ -59,7 +73,7 @@ namespace ui {
     }
 
     void MenuGroup::setHasBackArrow(bool has_back_arrow) {
-        this->has_back_arrow = has_back_arrow;
+        toolbar.setHasBackArrow(has_back_arrow);
     }
 
     void MenuGroup::drawBatteryMeter() {
@@ -85,7 +99,11 @@ namespace ui {
     }
 
     void MenuGroup::render() {
-        MenuAction::render();
+        Context::lcd_ptr->SetRegion(ui_region);
+        Context::lcd_ptr->FillColor(is_selected ? Context::color_scheme.PRIMARY_LIGHTER : Context::color_scheme.BACKGROUND_LIGHT);
+        textBlockName.setRegion(ui_region.x + PADDING, ui_region.y + TEXT_OFFSET, ui_region.w - PADDING * 2, ITEM_HEIGHT);
+        textBlockName.setText(name);
+        textBlockName.render();
 
         //Draw arrow
         Icons::drawCaret(
@@ -98,22 +116,7 @@ namespace ui {
     }
 
     void MenuGroup::drawBaseUI() {
-        //Draw title bar
-        for (uint8_t i = 0; i < TITLE_BAR_HEIGHT; i++) {
-            Context::lcd_ptr->SetRegion(libsc::Lcd::Rect(0, i, Context::full_screen.w, 1));
-            Context::lcd_ptr->FillColor(ColorUtil::rgb565Mix(
-                    Context::color_scheme.BACKGROUND_LIGHTER,
-                    Context::color_scheme.GRAY_LIGHTER,
-                    (double) i / TITLE_BAR_HEIGHT
-            ));
-        }
-        Context::lcd_ptr->SetRegion(libsc::Lcd::Rect(0, TITLE_BAR_HEIGHT - 1, Context::full_screen.w, 1));
-        Context::lcd_ptr->FillColor(Context::color_scheme.GRAY);
-        textBlockTitle.render();
-
-        //Draw back icon
-        if (has_back_arrow)
-            Icons::drawCaret(4, CARET_OFFSET, Context::color_scheme.BLACK, graphics::LEFT, 5);
+        toolbar.render();
 
         //Draw battery meter
         drawBatteryMeter();
@@ -212,6 +215,10 @@ namespace ui {
         selectNewActionByIndex(selected_index + (uint8_t) 1);
     }
 
+    void MenuGroup::runAction() {
+        run_action = menu_actions[selected_index];
+    }
+
     bool MenuGroup::isIndexInPage(uint8_t i) {
         uint8_t start_of_current_page_index = getCurrentPageIndex() * getItemsPerPage();
         return i >= start_of_current_page_index && i < start_of_current_page_index + getItemsPerPage();
@@ -233,5 +240,17 @@ namespace ui {
             Context::lcd_ptr->FillColor(Context::color_scheme.PRIMARY);
 
         }
+    }
+
+    /**
+     * Sets state of the menu group to have the menu exit in the next loop
+     */
+    void MenuGroup::exitMenu() {
+        is_exit = true;
+    }
+
+    void MenuGroup::setName(std::string name) {
+        MenuAction::setName(name);
+        toolbar.setName(name);
     }
 }

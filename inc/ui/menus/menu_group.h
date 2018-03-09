@@ -7,6 +7,8 @@
 
 
 #include <utility>
+#include <sstream>
+#include <libsc/system.h>
 #include <string>
 #include <libsc/lcd.h>
 #include <ui/context.h>
@@ -16,6 +18,7 @@
 #include <ui/icons.h>
 #include <ui/fonts/blocky.h>
 #include <ui/menus/menu_action.h>
+#include <ui/toolbar.h>
 
 namespace ui {
     class MenuGroup: public virtual MenuAction {
@@ -30,15 +33,26 @@ namespace ui {
 
         void render() override;
 
+        void selectPrevAction();
+
+        void selectNextAction();
+
+        void runAction();
+
+        bool isIndexInPage(uint8_t i);
+
+        void selectNewActionByIndex(uint8_t i);
+
+        void exitMenu();
+
+        void setName(std::string name) override;
+
     private:
         static const uint8_t TITLE_BAR_HEIGHT = 18;
-        static const uint16_t BATTERY_METER_WIDTH = 20;
         static const uint16_t SCROLLBAR_WIDTH = 2;
         static const uint16_t CARET_OFFSET = TEXT_OFFSET + 1;
 
-        bool has_back_arrow = false;
-
-        TextBlock textBlockTitle;
+        Toolbar toolbar;
         TextBlock textBlockBatteryVoltage;
 
         std::vector<MenuAction*> menu_actions;
@@ -49,21 +63,17 @@ namespace ui {
         uint8_t getCurrentPageIndex();
         uint8_t getPageIndexByItemIndex(uint8_t item_index);
 
+        MenuAction* run_action = nullptr;
+
         void drawBatteryMeter();
 
         void drawBaseUI();
 
         void drawPage();
 
-        void selectPrevAction();
-
-        void selectNextAction();
-
-        bool isIndexInPage(uint8_t i);
-
-        void selectNewActionByIndex(uint8_t i);
-
         void drawScrollBar();
+
+        bool is_exit = false;
     };
 }
 
