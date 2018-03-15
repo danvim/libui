@@ -1348,8 +1348,4 @@ const ui::FONT_INFO ui::fonts::ubuntuMono_10ptFontInfo =
                 ubuntuMono_10ptBitmaps //  Character bitmap array
         };
 
-const ui::fonts::UbuntuMono ui::fonts::ubuntu_mono;
-
-ui::fonts::UbuntuMono::UbuntuMono() : Font(ubuntuMono_10ptBitmaps, &ubuntuMono_10ptFontInfo, ubuntuMono_10ptDescriptors, true) {
-    FontRepo::addFont("Ubuntu Mono", this);
-}
+ui::fonts::UbuntuMono::UbuntuMono() : Font(ubuntuMono_10ptBitmaps, &ubuntuMono_10ptFontInfo, ubuntuMono_10ptDescriptors, true) {}

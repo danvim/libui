@@ -14,9 +14,10 @@ namespace ui {
     namespace font_families {
         class UbuntuMono: public FontFamily {
         public:
+            //TODO fix this
             UbuntuMono(): FontFamily(Config {
-                    &ui::fonts::ubuntu_mono,
-                    &ui::fonts::ubuntu_mono_italic,
+                    nullptr,
+                    nullptr,
                     nullptr,
                     nullptr,
                     nullptr,

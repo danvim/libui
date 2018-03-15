@@ -876,8 +876,4 @@ const ui::FONT_INFO ui::fonts::blocky_5ptFontInfo =
                 blocky_5ptBitmaps, //  Character bitmap array
         };
 
-const ui::fonts::Blocky ui::fonts::blocky;
-
-ui::fonts::Blocky::Blocky() : Font(ui::fonts::blocky_5ptBitmaps, &ui::fonts::blocky_5ptFontInfo, ui::fonts::blocky_5ptDescriptors) {
-    FontRepo::addFont("Blocky", this);
-}
+ui::fonts::Blocky::Blocky() : Font(ui::fonts::blocky_5ptBitmaps, &ui::fonts::blocky_5ptFontInfo, ui::fonts::blocky_5ptDescriptors) {}

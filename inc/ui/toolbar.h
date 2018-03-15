@@ -13,6 +13,7 @@
 #include "ui/text_block.h"
 #include "ui/fonts/humanist.h"
 #include <sstream>
+#include <cassert>
 
 namespace ui {
     /**

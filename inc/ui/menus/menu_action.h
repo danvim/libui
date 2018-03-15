@@ -13,6 +13,7 @@
 #include <ui/text_block.h>
 #include <ui/fonts/humanist.h>
 #include <ui/events/life_cycle_events.h>
+#include <cassert>
 
 namespace ui {
     /**

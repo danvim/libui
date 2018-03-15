@@ -8,7 +8,8 @@
 
 ui::MenuAction::MenuAction() {
     //Style setup
-    textBlockName.setFont(&fonts::humanist);
+    assert(Context::font_repo["Humanist"] != nullptr);
+    textBlockName.setFont(Context::font_repo["Humanist"]);
     textBlockName.setTextWrap(text::ELLIPSIS);
     textBlockName.setColor(Context::color_scheme.BODY);
     textBlockName.setText(this->name);
@@ -29,6 +30,12 @@ void ui::MenuAction::deselect() {
 }
 
 void ui::MenuAction::render() {
+    /**
+     * Remember to set font pointer in Context.
+     *
+     * @see ui::Context::font_repo
+     */
+
     Context::lcd_ptr->SetRegion(ui_region);
     Context::lcd_ptr->FillColor(is_selected ? Context::color_scheme.PRIMARY_LIGHTER : Context::color_scheme.BACKGROUND_LIGHT);
     textBlockName.setRegion(ui_region.x + PADDING, ui_region.y + TEXT_OFFSET, ui_region.w - PADDING, ITEM_HEIGHT);

@@ -2,8 +2,8 @@
 // Created by Daniel on 17/2/2018.
 //
 
-#ifndef INNO14_D_2017_INNO_MENU_H
-#define INNO14_D_2017_INNO_MENU_H
+#ifndef INNO14_D_2017_INNO_MENU_GROUP_H
+#define INNO14_D_2017_INNO_MENU_GROUP_H
 
 
 #include <utility>
@@ -19,6 +19,7 @@
 #include <ui/fonts/blocky.h>
 #include <ui/menus/menu_action.h>
 #include <ui/toolbar.h>
+#include <cassert>
 
 namespace ui {
     class MenuGroup: public virtual MenuAction {
@@ -41,11 +42,13 @@ namespace ui {
 
         bool isIndexInPage(uint8_t i);
 
-        void selectNewActionByIndex(uint8_t i);
+        void selectNewActionByIndex(int16_t i);
 
         void exitMenu();
 
         void setName(std::string name) override;
+
+        void setLoopBack(bool is_loop_back);
 
     private:
         static const uint8_t TITLE_BAR_HEIGHT = 18;
@@ -63,6 +66,8 @@ namespace ui {
         uint8_t getCurrentPageIndex();
         uint8_t getPageIndexByItemIndex(uint8_t item_index);
 
+        bool is_loop_back = true;
+
         MenuAction* run_action = nullptr;
 
         void drawBatteryMeter();
@@ -78,4 +83,4 @@ namespace ui {
 }
 
 
-#endif //INNO14_D_2017_INNO_MENU_H
+#endif //INNO14_D_2017_INNO_MENU_GROUP_H

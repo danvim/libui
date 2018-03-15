@@ -9,11 +9,13 @@
 #include <libsc/lcd.h>
 #include <libsc/joystick.h>
 #include <libsc/battery_meter.h>
+#include <libsc/system.h>
 #include <ui/color_schemes/color_scheme.h>
 #include <ui/ui_base.h>
 #include <ui/e.h>
 #include <map>
 #include <functional>
+#include "font.h"
 
 namespace ui {
     class Context {
@@ -88,6 +90,14 @@ namespace ui {
         static void removeEventListener(Event event, std::function<void(E event_obj)>* cb_ptr);
 
         static void triggerListeners(Event event, E event_object);
+
+        static std::map<std::string, Font*> font_repo;
+
+        static void addFontToRepo(const std::string &name, Font* font_ptr);
+
+        static void removeFontFromRepo(const std::string &name);
+
+        static void clearFontRepo();
 
         static libsc::Joystick::Listener joystick_listeners_dispatcher;
     };

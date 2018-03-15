@@ -13,13 +13,20 @@ namespace ui {
         toolbar.setRegion(ui_region.x, ui_region.y, ui_region.w, TITLE_BAR_HEIGHT);
         toolbar.reserveHSpace(16);
 
-        textBlockBatteryVoltage.setFont(&fonts::blocky);
+        assert(Context::font_repo["Blocky"] != nullptr);
+        textBlockBatteryVoltage.setFont(Context::font_repo["Blocky"]);
         textBlockBatteryVoltage.setTextWrap(text::NO_WRAP);
         textBlockBatteryVoltage.setRegion(112, 6, 20, 5);
         textBlockBatteryVoltage.setText("Err");
     }
 
     int MenuGroup::run() {
+        /**
+         * Remember to set font pointer in Context.
+         *
+         * @see ui::Context::font_repo
+         */
+
         drawBaseUI();
 
         //Draw items
@@ -185,8 +192,13 @@ namespace ui {
         return item_index / getItemsPerPage();
     }
 
-    void MenuGroup::selectNewActionByIndex(uint8_t new_index) {
-        new_index = (uint8_t) std::min(std::max((int) new_index, 0), (int) (menu_actions.size() - 1));
+    void MenuGroup::selectNewActionByIndex(int16_t new_index) {
+        if (is_loop_back) {
+            new_index = new_index % (int16_t) menu_actions.size();
+            if (new_index < 0)
+            	new_index += (int16_t) menu_actions.size();
+        } else
+            new_index = (uint8_t) std::min(std::max((int) new_index, 0), (int) (menu_actions.size() - 1));
 
         if (new_index == selected_index)
             return;
@@ -208,7 +220,7 @@ namespace ui {
     }
 
     void MenuGroup::selectPrevAction() {
-        selectNewActionByIndex((uint8_t) std::max(selected_index -  1, 0));
+        selectNewActionByIndex(selected_index - (uint8_t) 1);
     }
 
     void MenuGroup::selectNextAction() {
@@ -252,5 +264,9 @@ namespace ui {
     void MenuGroup::setName(std::string name) {
         MenuAction::setName(name);
         toolbar.setName(name);
+    }
+
+    void MenuGroup::setLoopBack(bool is_loop_back) {
+        this->is_loop_back = is_loop_back;
     }
 }

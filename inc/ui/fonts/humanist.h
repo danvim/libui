@@ -7,7 +7,6 @@
 
 #include <cstdint>
 #include "ui/font.h"
-#include "ui/font_repo.h"
 
 namespace ui {
     namespace fonts {
@@ -20,8 +19,6 @@ namespace ui {
         public:
             Humanist();
         };
-
-        extern const Humanist humanist;
     }
 }
 

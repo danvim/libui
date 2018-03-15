@@ -1440,9 +1440,4 @@ const ui::FONT_INFO ui::fonts::humanist_9ptFontInfo =
                 humanist_9ptDescriptors, //  Character descriptor array
                 humanist_9ptBitmaps, //  Character bitmap array
         };
-
-const ui::fonts::Humanist ui::fonts::humanist;
-
-ui::fonts::Humanist::Humanist() : Font(ui::fonts::humanist_9ptBitmaps, &ui::fonts::humanist_9ptFontInfo, ui::fonts::humanist_9ptDescriptors) {
-    FontRepo::addFont("Humanist", this);
-}
+ui::fonts::Humanist::Humanist() : Font(ui::fonts::humanist_9ptBitmaps, &ui::fonts::humanist_9ptFontInfo, ui::fonts::humanist_9ptDescriptors) {}

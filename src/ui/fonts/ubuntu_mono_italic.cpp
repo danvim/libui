@@ -1346,10 +1346,4 @@ const ui::FONT_INFO ui::fonts::ubuntuMonoItalic_10ptFontInfo =
                 ubuntuMonoItalic_10ptBitmaps, //  Character bitmap array
         };
 
-
-
-const ui::fonts::UbuntuMonoItalic ui::fonts::ubuntu_mono_italic;
-
-ui::fonts::UbuntuMonoItalic::UbuntuMonoItalic() : Font(ubuntuMonoItalic_10ptBitmaps, &ubuntuMonoItalic_10ptFontInfo, ubuntuMonoItalic_10ptDescriptors, true) {
-    FontRepo::addFont("Ubuntu Mono Italic", this);
-}
+ui::fonts::UbuntuMonoItalic::UbuntuMonoItalic() : Font(ubuntuMonoItalic_10ptBitmaps, &ubuntuMonoItalic_10ptFontInfo, ubuntuMonoItalic_10ptDescriptors, true) {}

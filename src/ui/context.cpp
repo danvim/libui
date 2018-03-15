@@ -58,11 +58,7 @@ namespace ui {
     }
 
     void Context::addEventListener(Event event, std::function<void(E)>* cb_ptr) {
-        std::pair<Event, std::function<void(E)>*> key = {event, cb_ptr};
-        //Check if the function is already in map
-        if ( listener_map.find(key) == listener_map.end() ) {
-            listener_map.insert({key, cb_ptr});
-        }
+        listener_map[{event, cb_ptr}] = cb_ptr;
     }
 
     void Context::removeEventListener(Event event, std::function<void(E)>* cb_ptr) {
@@ -97,10 +93,28 @@ namespace ui {
         //TODO btn listener setup
     }
 
+    std::map<std::string, Font*> Context::font_repo;
+
+    void Context::addFontToRepo(const std::string &name, Font* font_ptr) {
+        font_repo[name] = font_ptr;
+    }
+
+    void Context::removeFontFromRepo(const std::string &name) {
+        if ( font_repo.find(name) != font_repo.end() ) {
+            font_repo.erase(name);
+        }
+    }
+
+    void Context::clearFontRepo() {
+        font_repo.clear();
+    }
+
     libsc::Joystick::Listener Context::joystick_listeners_dispatcher = [](const uint8_t id, const libsc::Joystick::State which)->void{
         E::Config e;
         e.JOYSTICK_ID = id,
         e.JOYSTICK_STATE = which;
+
+        libsc::System::DelayMs(300);
 
         //Check whether action is up or down
         if (joystick_ptr->GetState() == libsc::Joystick::State::kIdle) {

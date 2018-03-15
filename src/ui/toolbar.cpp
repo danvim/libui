@@ -8,7 +8,8 @@ namespace ui {
 
     Toolbar::Toolbar() {
         //Style setup
-        textBlockTitle.setFont(&fonts::humanist);
+        assert(Context::font_repo["Humanist"] != nullptr);
+        textBlockTitle.setFont(Context::font_repo["Humanist"]);
         textBlockTitle.setTextWrap(text::ELLIPSIS);
         textBlockTitle.setColor(Context::color_scheme.BODY);
         textBlockTitle.setRegion(ui_region.x + PADDING, ui_region.y + TEXT_OFFSET, Context::full_screen.w - PADDING, 12);

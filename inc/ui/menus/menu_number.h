@@ -7,6 +7,8 @@
 
 
 #include <ui/menus/menu_action.h>
+#include <ui/icons.h>
+#include <sstream>
 
 namespace ui {
     template <class T>
@@ -23,6 +25,8 @@ namespace ui {
         int run() override;
 
         void setName(std::string name) override;
+
+        virtual void onChange();
 
     protected:
         T value;
@@ -50,11 +54,10 @@ namespace ui {
         void printValue();
     };
 
-
     template<class T>
     MenuNumber<T>::MenuNumber() {
         //Style setup
-        textBlockLabel.setFont(&fonts::humanist);
+        textBlockLabel.setFont(Context::font_repo["Humanist"]);
         textBlockLabel.setTextWrap(text::ELLIPSIS);
         textBlockLabel.setColor(Context::color_scheme.BODY);
         textBlockLabel.setRegion(DIALOG_REGION.x + DIALOG_TEXT_OFFSET, DIALOG_REGION.y + DIALOG_TEXT_OFFSET, DIALOG_WIDTH - DIALOG_TEXT_OFFSET * 2, 10);
@@ -62,7 +65,7 @@ namespace ui {
 
         text_region = libsc::Lcd::Rect(DIALOG_REGION.x + DIALOG_TEXT_OFFSET * 2 + CARET_SIZE, DIALOG_REGION.y + 25, DIALOG_REGION.w - (DIALOG_TEXT_OFFSET * 2 + CARET_SIZE) * 2, 12);
 
-        textBlockValue.setFont(&fonts::humanist);
+        textBlockValue.setFont(Context::font_repo["Humanist"]);
         textBlockValue.setTextWrap(text::ELLIPSIS);
         textBlockValue.setColor(Context::color_scheme.BODY);
         textBlockValue.setRegion(text_region);
@@ -99,10 +102,12 @@ namespace ui {
                 //Decrease
                 value -= step;
                 printValue();
+                onChange();
             } else if (e.JOYSTICK_STATE == Context::JOYSTICK_RIGHT) {
                 //Increase
                 value += step;
                 printValue();
+                onChange();
             } else if (e.JOYSTICK_STATE == Context::JOYSTICK_SELECT) {
                 is_exit = true;
             }
@@ -135,7 +140,7 @@ namespace ui {
     }
 
     template<class T>
-    void ui::MenuNumber<T>::setName(std::string name) {
+    void MenuNumber<T>::setName(std::string name) {
         MenuAction::setName(name);
         textBlockLabel.setText(this->name);
     }
@@ -146,11 +151,19 @@ namespace ui {
         Context::lcd_ptr->SetRegion(text_region);
         Context::lcd_ptr->FillColor(Context::color_scheme.BACKGROUND_LIGHTER);
 
-        char str[256];
-        sprintf(str, "%.2f", value);
-        textBlockValue.setText(std::string(str));
+        std::ostringstream os;
+        os.precision(3);
+        os << std::fixed;
+        os << value;
+
+        textBlockValue.setText(os.str());
         textBlockValue.render();
     }
+
+    template<class T>
+    void MenuNumber<T>::onChange() {}
+
+
 }
 
 

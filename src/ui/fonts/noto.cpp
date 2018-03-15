@@ -5012,9 +5012,4 @@ const ui::FONT_INFO ui::fonts::noto_32ptFontInfo =
                 ui::fonts::noto_32ptBitmaps, //  Character bitmap array
         };
 
-
-const ui::fonts::Noto ui::fonts::noto;
-
-ui::fonts::Noto::Noto() : Font(ui::fonts::noto_32ptBitmaps, &ui::fonts::noto_32ptFontInfo, ui::fonts::noto_32ptDescriptors) {
-    FontRepo::addFont("Noto", this);
-}
+ui::fonts::Noto::Noto() : Font(ui::fonts::noto_32ptBitmaps, &ui::fonts::noto_32ptFontInfo, ui::fonts::noto_32ptDescriptors) {}
