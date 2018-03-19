@@ -74,6 +74,7 @@ namespace ui {
 
     template<class T>
     int MenuNumber<T>::run() {
+    	onEnter();
         //Draw dialog
         Context::lcd_ptr->SetRegion(DIALOG_REGION);
         Context::lcd_ptr->FillColor(Context::color_scheme.BACKGROUND_LIGHTER);
@@ -120,6 +121,8 @@ namespace ui {
         while (!is_exit) {}
 
         Context::removeEventListener(Event::JOYSTICK_DOWN, &joystick_handler);
+
+        onExit();
 
         return SUCCESS;
     }

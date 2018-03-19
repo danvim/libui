@@ -181,7 +181,7 @@ namespace ui {
     }
 
     uint8_t MenuGroup::getTotalPages() {
-        return (uint8_t) (menu_actions.size() / getItemsPerPage() + 1);
+        return (uint8_t) (menu_actions.size() / getItemsPerPage());
     }
 
     uint8_t MenuGroup::getCurrentPageIndex() {
