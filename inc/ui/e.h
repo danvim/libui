@@ -2,10 +2,8 @@
 // Created by Daniel on 7/3/2018.
 //
 
-#ifndef INNO14_D_2017_INNO_E_H
-#define INNO14_D_2017_INNO_E_H
-
-#include <libsc/joystick.h>
+#ifndef LIBUI_E_H
+#define LIBUI_E_H
 
 namespace ui {
 
@@ -21,6 +19,15 @@ namespace ui {
         BTN_UP
     };
 
+    enum struct JoystickState {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT,
+        SELECT,
+        IDLE
+    };
+
     /**
      * Event Object for listener relay in Context to describe the event in detail.
      *
@@ -32,13 +39,13 @@ namespace ui {
     class E {
     public:
         const uint8_t JOYSTICK_ID;
-        const libsc::Joystick::State JOYSTICK_STATE;
+        const JoystickState JOYSTICK_STATE;
         const bool IS_JOYSTICK_DOWN;
         const bool IS_BTN_DOWN;
 
         struct Config {
             uint8_t JOYSTICK_ID = 0;
-            libsc::Joystick::State JOYSTICK_STATE = libsc::Joystick::State::kIdle;
+            JoystickState JOYSTICK_STATE = JoystickState::IDLE;
             bool IS_JOYSTICK_DOWN = false;
             bool IS_BTN_DOWN = false;
         };
@@ -52,4 +59,4 @@ namespace ui {
 }
 
 
-#endif //INNO14_D_2017_INNO_E_H
+#endif //LIBUI_E_H

@@ -12,22 +12,24 @@ namespace ui {
         textBlockTitle.setFont(Context::font_repo["Humanist"]);
         textBlockTitle.setTextWrap(text::ELLIPSIS);
         textBlockTitle.setColor(Context::color_scheme.BODY);
-        textBlockTitle.setRegion(ui_region.x + PADDING, ui_region.y + TEXT_OFFSET, Context::full_screen.w - PADDING, 12);
+        textBlockTitle.setRegion(ui_region.x + PADDING, ui_region.y + TEXT_OFFSET, Context::getScreen()->getWidth() - PADDING, 12);
         textBlockTitle.setText(this->name);
     }
 
     void Toolbar::render() {
+        adapters::ScreenAdapterInterface* screen_ptr = Context::getScreen();
+        
         //Draw title bar
         for (uint8_t i = 0; i < TOOLBAR_HEIGHT; i++) {
-            Context::lcd_ptr->SetRegion(libsc::Lcd::Rect(ui_region.x, ui_region.y + i, Context::full_screen.w, 1));
-            Context::lcd_ptr->FillColor(ColorUtil::rgb565Mix(
+            screen_ptr->setRegion(ui_region.x, ui_region.y + i, screen_ptr->getWidth(), 1);
+            screen_ptr->fill(ColorUtil::rgb565Mix(
                     Context::color_scheme.BACKGROUND_LIGHTER,
                     Context::color_scheme.GRAY_LIGHTER,
                     (double) i / TOOLBAR_HEIGHT
             ));
         }
-        Context::lcd_ptr->SetRegion(libsc::Lcd::Rect(ui_region.x, ui_region.y + TOOLBAR_HEIGHT - 1, Context::full_screen.w, 1));
-        Context::lcd_ptr->FillColor(Context::color_scheme.GRAY);
+        screen_ptr->setRegion(ui_region.x, ui_region.y + TOOLBAR_HEIGHT - 1, screen_ptr->getWidth(), 1);
+        screen_ptr->fill(Context::color_scheme.GRAY);
 
         textBlockTitle.setText(name);
         textBlockTitle.render();
@@ -45,8 +47,8 @@ namespace ui {
         this->name = std::move(name);
     }
 
-    void Toolbar::reserveHSpace(Uint w) {
-        textBlockTitle.setRegion(ui_region.x + PADDING, ui_region.y + TEXT_OFFSET, Context::full_screen.w - PADDING - w, 12);
+    void Toolbar::reserveHSpace(uint32_t w) {
+        textBlockTitle.setRegion(ui_region.x + PADDING, ui_region.y + TEXT_OFFSET, Context::getScreen()->getWidth() - PADDING - w, 12);
     }
 
 }

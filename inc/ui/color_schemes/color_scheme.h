@@ -2,8 +2,8 @@
 // Created by Daniel on 22/2/2018.
 //
 
-#ifndef INNO14_D_2017_INNO_COLOR_SCHEME_H
-#define INNO14_D_2017_INNO_COLOR_SCHEME_H
+#ifndef LIBUI_COLOR_SCHEME_H
+#define LIBUI_COLOR_SCHEME_H
 
 
 #include <cstdint>
@@ -47,4 +47,4 @@ namespace ui {
     };
 }
 
-#endif //INNO14_D_2017_INNO_COLOR_SCHEME_H
+#endif //LIBUI_COLOR_SCHEME_H

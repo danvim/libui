@@ -2,12 +2,12 @@
 // Created by Daniel on 19/2/2018.
 //
 
-#ifndef INNO14_D_2017_INNO_UI_ELEMENT_H
-#define INNO14_D_2017_INNO_UI_ELEMENT_H
+#ifndef LIBUI_UI_ELEMENT_H
+#define LIBUI_UI_ELEMENT_H
 
 #include <cstdint>
 #include <ui/ui_base.h>
-#include <libsc/lcd.h>
+#include "context.h"
 
 namespace ui {
 
@@ -50,9 +50,9 @@ namespace ui {
         Layout horizontal_layout = WRAP_CONTENT;
         Layout vertical_layout = WRAP_CONTENT;
         Opacity background_opacity = TRANSPARENT;
-        uint16_t background_color = libsc::Lcd::kBlack;
+        uint16_t background_color = Context::color_scheme.BLACK;
     };
 }
 
 
-#endif //INNO14_D_2017_INNO_UI_ELEMENT_H
+#endif //LIBUI_UI_ELEMENT_H

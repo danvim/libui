@@ -2,8 +2,8 @@
 // Created by Daniel on 19/2/2018.
 //
 
-#ifndef INNO14_D_2017_INNO_SCREEN_H
-#define INNO14_D_2017_INNO_SCREEN_H
+#ifndef LIBUI_SCREEN_H
+#define LIBUI_SCREEN_H
 
 #include <vector>
 #include <cstdint>
@@ -32,4 +32,4 @@ namespace ui {
 }
 
 
-#endif //INNO14_D_2017_INNO_SCREEN_H
+#endif //LIBUI_SCREEN_H
