@@ -28,7 +28,9 @@ namespace ui {
 
         void setHasBackArrow(bool has_back_arrow);
 
-        void addMenuAction(MenuAction* menu_action);
+        void addMenuAction(MenuAction* menu_action_ptr);
+
+        void addMenuActions(std::initializer_list<MenuAction*> menu_action_ptrs);
 
         void render() override;
 
@@ -40,7 +42,7 @@ namespace ui {
 
         bool isIndexInPage(uint8_t i);
 
-        void selectNewActionByIndex(uint8_t i);
+        void selectNewActionByIndex(int16_t i);
 
         void exitMenu();
 

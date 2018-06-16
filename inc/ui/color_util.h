@@ -28,6 +28,8 @@ namespace ui {
             double g = 1;
             double b = 1;
 
+            RGBDouble();
+
             RGBDouble(double r_, double g_, double b_);
 
             HSV toHSV();
@@ -42,6 +44,8 @@ namespace ui {
             uint16_t g = 255;
             uint16_t b = 255;
 
+            RGB24();
+
             RGB24(uint16_t r_, uint16_t g_, uint16_t b_);
 
             /**
@@ -55,6 +59,8 @@ namespace ui {
             uint8_t r = 0x1F;
             uint8_t g = 0x3F;
             uint8_t b = 0x1F;
+
+            RGB565();
 
             RGB565(uint8_t r_, uint8_t g_, uint8_t b_);
 
@@ -83,6 +89,8 @@ namespace ui {
             double h = 0;
             double s = 0;
             double v = 1;
+
+            HSV();
 
             HSV(double h_, double s_, double v_);
 

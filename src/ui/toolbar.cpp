@@ -12,7 +12,6 @@ namespace ui {
         textBlockTitle.setFont(Context::font_repo["Humanist"]);
         textBlockTitle.setTextWrap(text::ELLIPSIS);
         textBlockTitle.setColor(Context::color_scheme.BODY);
-        textBlockTitle.setRegion(ui_region.x + PADDING, ui_region.y + TEXT_OFFSET, Context::getScreen()->getWidth() - PADDING, 12);
         textBlockTitle.setText(this->name);
     }
 
@@ -23,7 +22,7 @@ namespace ui {
         for (uint8_t i = 0; i < TOOLBAR_HEIGHT; i++) {
             screen_ptr->setRegion(ui_region.x, ui_region.y + i, screen_ptr->getWidth(), 1);
             screen_ptr->fill(ColorUtil::rgb565Mix(
-                    Context::color_scheme.BACKGROUND_LIGHTER,
+                    Context::color_scheme.BACKGROUND_LIGHT,
                     Context::color_scheme.GRAY_LIGHTER,
                     (double) i / TOOLBAR_HEIGHT
             ));
@@ -32,11 +31,12 @@ namespace ui {
         screen_ptr->fill(Context::color_scheme.GRAY);
 
         textBlockTitle.setText(name);
+        textBlockTitle.setRegion(ui_region.x + PADDING, ui_region.y + TEXT_OFFSET, Context::getScreen()->getWidth() - PADDING, 12);
         textBlockTitle.render();
 
         //Draw back icon
         if (has_back_arrow)
-            Icons::drawCaret(ui_region.x + 4, ui_region.y + CARET_OFFSET, Context::color_scheme.BLACK, graphics::LEFT, 5);
+            Icons::drawCaret(ui_region.x + 4, ui_region.y + CARET_OFFSET, Context::color_scheme.BODY, graphics::LEFT, 5);
     }
 
     void Toolbar::setHasBackArrow(bool has_back_arrow) {

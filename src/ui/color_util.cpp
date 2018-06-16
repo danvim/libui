@@ -65,6 +65,8 @@ namespace ui {
         };
     }
 
+    ColorUtil::RGBDouble::RGBDouble() = default;
+
     ColorUtil::RGB24::RGB24(uint16_t r_, uint16_t g_, uint16_t b_)
             : r(r_), g(g_), b(b_) {}
 
@@ -75,6 +77,8 @@ namespace ui {
                 (uint8_t) (b * 31 / 255)
         };
     }
+
+    ColorUtil::RGB24::RGB24() = default;
 
     uint16_t ColorUtil::RGB565::toUInt16() {
         return r << 11u ^ g << 5u ^ b;
@@ -99,6 +103,8 @@ namespace ui {
                 (uint16_t) (b * 255 / 31)
         };
     }
+
+    ColorUtil::RGB565::RGB565() = default;
 
     uint16_t ColorUtil::rgb565Mix(ColorUtil::RGB565 &color_from, ColorUtil::RGB565 &color_to, double_t percent) {
         auto r = (uint8_t) round(color_to.r * percent + color_from.r * (1-percent));
@@ -164,4 +170,6 @@ namespace ui {
         v = std::max(1.0, std::min(0.0, v));
         return *this;
     }
+
+    ColorUtil::HSV::HSV() = default;
 }

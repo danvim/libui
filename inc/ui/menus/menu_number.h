@@ -80,7 +80,7 @@ namespace ui {
     	
         //Draw dialog
         screen_ptr->setRegion(DIALOG_REGION);
-        screen_ptr->fill(Context::color_scheme.BACKGROUND_LIGHTER);
+        screen_ptr->fill(Context::color_scheme.BACKGROUND_LIGHT);
 
         //Draw border
         screen_ptr->setRegion(DIALOG_REGION.x, DIALOG_REGION.y, DIALOG_WIDTH, 1);
@@ -101,7 +101,7 @@ namespace ui {
 
         bool is_exit = false;
 
-        std::function<void(E)> joystick_handler = [&](E e){
+        std::function<void(E&)> joystick_handler = [&](E& e){
             if (e.JOYSTICK_STATE == JoystickState::LEFT) {
                 //Decrease
                 value -= step;
@@ -115,6 +115,7 @@ namespace ui {
             } else if (e.JOYSTICK_STATE == JoystickState::SELECT) {
                 is_exit = true;
             }
+            e.consume();
         };
 
         Context::addEventListener(Event::JOYSTICK_DOWN, &joystick_handler);
@@ -157,7 +158,7 @@ namespace ui {
         
         //Re-render
         screen_ptr->setRegion(text_region);
-        screen_ptr->fill(Context::color_scheme.BACKGROUND_LIGHTER);
+        screen_ptr->fill(Context::color_scheme.BACKGROUND_LIGHT);
 
         std::ostringstream os;
         os.precision(3);

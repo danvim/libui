@@ -36,7 +36,7 @@ void ui::MenuAction::render() {
      adapters::ScreenAdapterInterface* screen_ptr = Context::getScreen();
 
     screen_ptr->setRegion(ui_region);
-    screen_ptr->fill(is_selected ? Context::color_scheme.PRIMARY_LIGHTER : Context::color_scheme.BACKGROUND_LIGHT);
+    screen_ptr->fill(is_selected ? Context::color_scheme.PRIMARY_LIGHTER : Context::color_scheme.BACKGROUND);
     textBlockName.setRegion(ui_region.x + PADDING, ui_region.y + TEXT_OFFSET, ui_region.w - PADDING, ITEM_HEIGHT);
     textBlockName.setText(name);
     textBlockName.render();

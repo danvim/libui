@@ -36,8 +36,8 @@ namespace ui {
         uint16_t PRIMARY_DARKER = 0x12D0;
         uint16_t SUCCESS = 0x062A;
         uint16_t DANGER = 0xDA09;
-        uint16_t BACKGROUND_LIGHT = 0xF7DE;
-        uint16_t BACKGROUND_LIGHTER = 0xFFFF;
+        uint16_t BACKGROUND = 0xF7DE;
+        uint16_t BACKGROUND_LIGHT = 0xFFFF;
         uint16_t BODY = 0x0000;
         uint16_t GRAY = 0xA576;
         uint16_t GRAY_LIGHTER = 0xDEFB;

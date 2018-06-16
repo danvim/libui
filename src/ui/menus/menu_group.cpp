@@ -35,15 +35,18 @@ namespace ui {
         //Rendering loop
         uint32_t time = Context::getSystemTime();
 
-        std::function<void(E)> joystick_handler = [&](E e){
+        std::function<void(E&)> joystick_handler = [&](E& e){
             if (e.JOYSTICK_STATE == JoystickState::UP) {
                 //Select prev item
                 selectPrevAction();
+                e.consume();
             } else if (e.JOYSTICK_STATE == JoystickState::DOWN) {
                 //Select next item
                 selectNextAction();
+                e.consume();
             } else if (e.JOYSTICK_STATE == JoystickState::SELECT) {
                 runAction();
+                e.consume();
             }
         };
 
@@ -55,10 +58,8 @@ namespace ui {
 
                 //When an action is queued for running
                 if (run_action != nullptr) {
-                    Context::removeEventListener(Event::JOYSTICK_DOWN, &joystick_handler);
                     run_action->run();
                     run_action = nullptr;
-                    Context::addEventListener(Event::JOYSTICK_DOWN, &joystick_handler);
 
                     if (is_exit)
                         break;
@@ -94,7 +95,7 @@ namespace ui {
 
         Icons::drawBatteryGauge(screen_ptr->getWidth() - 19u, 4, battery_color, 16, 9);
         screen_ptr->setRegion(screen_ptr->getWidth() - 18u, 5, 13, 7);
-        screen_ptr->fill(Context::color_scheme.BACKGROUND_LIGHTER);
+        screen_ptr->fill(Context::color_scheme.BACKGROUND_LIGHT);
         std::ostringstream os;
         os << (roundf(voltage * 10) / 10);
         if (os.str().back() == '.')
@@ -104,15 +105,21 @@ namespace ui {
         textBlockBatteryVoltage.render();
     }
 
-    void MenuGroup::addMenuAction(MenuAction* menu_action) {
-        menu_actions.push_back(menu_action);
+    void MenuGroup::addMenuAction(MenuAction* menu_action_ptr) {
+        menu_actions.push_back(menu_action_ptr);
+    }
+
+    void MenuGroup::addMenuActions(std::initializer_list<MenuAction *> menu_action_ptrs) {
+        for (auto* menu_action_ptr: menu_action_ptrs) {
+            addMenuAction(menu_action_ptr);
+        }
     }
 
     void MenuGroup::render() {
         adapters::ScreenAdapterInterface* screen_ptr = Context::getScreen();
 
         screen_ptr->setRegion(ui_region);
-        screen_ptr->fill(is_selected ? Context::color_scheme.PRIMARY_LIGHTER : Context::color_scheme.BACKGROUND_LIGHT);
+        screen_ptr->fill(is_selected ? Context::color_scheme.PRIMARY_LIGHTER : Context::color_scheme.BACKGROUND);
         textBlockName.setRegion(ui_region.x + PADDING, ui_region.y + TEXT_OFFSET, ui_region.w - PADDING * 2, ITEM_HEIGHT);
         textBlockName.setText(name);
         textBlockName.render();
@@ -142,15 +149,15 @@ namespace ui {
                 SCROLLBAR_WIDTH,
                 screen_ptr->getHeight() - TITLE_BAR_HEIGHT
         );
-        screen_ptr->fill(Context::color_scheme.BACKGROUND_LIGHTER);
+        screen_ptr->fill(Context::color_scheme.BACKGROUND_LIGHT);
     }
 
     void MenuGroup::drawPage() {
         adapters::ScreenAdapterInterface* screen_ptr = Context::getScreen();
         
         //Draw background
-        screen_ptr->setRegion(0, TITLE_BAR_HEIGHT, screen_ptr->getWidth(), screen_ptr->getHeight());
-        screen_ptr->fill(Context::color_scheme.BACKGROUND_LIGHT);
+        screen_ptr->setRegion(0, TITLE_BAR_HEIGHT, screen_ptr->getWidth(), screen_ptr->getHeight() - TITLE_BAR_HEIGHT);
+        screen_ptr->fill(Context::color_scheme.BACKGROUND);
 
         std::deque<MenuAction*> current_page_actions;
 
@@ -201,13 +208,13 @@ namespace ui {
         return item_index / getItemsPerPage();
     }
 
-    void MenuGroup::selectNewActionByIndex(uint8_t new_index) {
+    void MenuGroup::selectNewActionByIndex(int16_t new_index) {
         if (is_loop_back) {
-            new_index = new_index % (uint8_t) menu_actions.size();
+            new_index = new_index % (int16_t) menu_actions.size();
             if (new_index < 0)
-            	new_index += (uint8_t) menu_actions.size();
+            	new_index += (int16_t) menu_actions.size();
         } else
-            new_index = (uint8_t) std::min(std::max((int) new_index, 0), (int) (menu_actions.size() - 1));
+            new_index = (int16_t) std::min(std::max((int) new_index, 0), (int) (menu_actions.size() - 1));
 
         if (new_index == selected_index)
             return;
@@ -216,14 +223,14 @@ namespace ui {
         MenuAction* new_action_ptr = menu_actions[new_index];
         current_action_ptr->deselect();
         new_action_ptr->select();
-        if (isIndexInPage(new_index)) {
+        if (isIndexInPage((uint8_t) new_index)) {
             //New index is in the same page. Alter current and last item
             current_action_ptr->render();
             new_action_ptr->render();
-            selected_index = new_index;
+            selected_index = (uint8_t) new_index;
         } else {
             //New index is on a new page. Need to re-render entire page
-            selected_index = new_index;
+            selected_index = (uint8_t) new_index;
             drawPage();
         }
     }

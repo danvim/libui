@@ -21,12 +21,16 @@ namespace ui {
 
         static ColorScheme color_scheme;
 
+        /**
+         * Sets color scheme
+         * @param colorScheme
+         */
         static void setColorScheme(ColorScheme colorScheme);
 
         /**
          * Relays all UI listeners to lower level libraries, so that removing listeners is possible
          */
-        static std::map<std::pair<Event, std::function<void(E event_obj)>*>, std::function<void(E event_obj)>*>
+        static std::map<std::pair<Event, std::function<void(E& event_obj)>*>, std::function<void(E& event_obj)>*>
                 listener_map;
 
         /**
@@ -41,18 +45,12 @@ namespace ui {
          * @param event
          * @param cb_ptr
          */
-        static void addEventListener(Event event, std::function<void(E event_obj)>* cb_ptr);
-
-        static void removeEventListener(Event event, std::function<void(E event_obj)>* cb_ptr);
-
-        static void triggerListeners(Event event, E event_object);
-
+        static void addEventListener(Event event, std::function<void(E& event_obj)>* cb_ptr);
+        static void removeEventListener(Event event, std::function<void(E& event_obj)>* cb_ptr);
+        static void triggerListeners(Event event, E e);
         static std::map<std::string, Font*> font_repo;
-
         static void addFontToRepo(const std::string &name, Font* font_ptr);
-
         static void removeFontFromRepo(const std::string &name);
-
         static void clearFontRepo();
 
         static void attachAdapter(ui::adapters::ContextAdapterInterface* context_adapter_interface_ptr);
@@ -60,6 +58,9 @@ namespace ui {
         static adapters::ScreenAdapterInterface* getScreen();
         static adapters::JoystickAdapterInterface* getJoystick();
         static adapters::BatteryMeterAdapterInterface* getBatteryMeter();
+        static void remapJoystickDirections(JoystickState up, JoystickState down, JoystickState left,
+                                            JoystickState right, JoystickState select = JoystickState::SELECT,
+                                            JoystickState idle = JoystickState::IDLE);
         static void setGUIRotation(adapters::ContextAdapterInterface::RotationalChange rotational_change);
         static uint32_t getSystemTime();
     };

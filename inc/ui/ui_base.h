@@ -42,7 +42,7 @@ namespace ui {
         Visibility getVisibility();
 
     protected:
-        graphics::Rectangle ui_region{};
+        graphics::Rectangle ui_region;
         Visibility visibility = VISIBLE;
     };
 }

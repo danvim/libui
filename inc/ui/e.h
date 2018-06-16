@@ -5,6 +5,8 @@
 #ifndef LIBUI_E_H
 #define LIBUI_E_H
 
+#include <cstdint>
+
 namespace ui {
 
     /**
@@ -55,6 +57,17 @@ namespace ui {
                 JOYSTICK_STATE(config.JOYSTICK_STATE),
                 IS_JOYSTICK_DOWN(config.IS_JOYSTICK_DOWN),
                 IS_BTN_DOWN(config.IS_BTN_DOWN) {}
+
+        bool isConsumed() {
+            return is_consumed;
+        }
+
+        void consume() {
+            is_consumed = true;
+        }
+
+    private:
+        bool is_consumed = false;
     };
 }
 

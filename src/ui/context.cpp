@@ -9,28 +9,32 @@ namespace ui {
 
     ColorScheme Context::color_scheme;
 
-    std::map<std::pair<Event, std::function<void(E)>*>, std::function<void(E)>*> Context::listener_map;
+    std::map<std::pair<Event, std::function<void(E&)>*>, std::function<void(E&)>*> Context::listener_map;
 
     void Context::setColorScheme(ColorScheme colorScheme) {
         Context::color_scheme = colorScheme;
     }
 
-    void Context::addEventListener(Event event, std::function<void(E)>* cb_ptr) {
+    void Context::addEventListener(Event event, std::function<void(E&)>* cb_ptr) {
         listener_map[{event, cb_ptr}] = cb_ptr;
     }
 
-    void Context::removeEventListener(Event event, std::function<void(E)>* cb_ptr) {
-        std::pair<Event, std::function<void(E)>*> key = {event, cb_ptr};
+    void Context::removeEventListener(Event event, std::function<void(E&)>* cb_ptr) {
+        std::pair<Event, std::function<void(E&)>*> key = {event, cb_ptr};
         //Check if the function is already in map
         if ( listener_map.find(key) != listener_map.end() ) {
             listener_map.erase(key);
         }
     }
 
-    void Context::triggerListeners(Event event, E event_object) {
-        for (auto& pair: listener_map) {
+    void Context::triggerListeners(Event event, E e) {
+        for (auto it = listener_map.begin(); it != listener_map.end(); ++it) {
+            auto& pair = *it;
             if (pair.first.first == event)
-                (*pair.second)(event_object);
+                (*pair.second)(e);
+
+            if (e.isConsumed())
+                break;
         }
     }
 
@@ -72,6 +76,11 @@ namespace ui {
 
     void Context::setGUIRotation(adapters::ContextAdapterInterface::RotationalChange rotational_change) {
         context_adapter_ptr->setGUIRotation(rotational_change);
+    }
+
+    void Context::remapJoystickDirections(JoystickState up, JoystickState down, JoystickState left, JoystickState right,
+                                          JoystickState select, JoystickState idle) {
+        context_adapter_ptr->remapJoystickDirections(up, down, left, right, select, idle);
     }
 
     uint32_t Context::getSystemTime() {
