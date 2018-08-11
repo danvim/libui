@@ -99,7 +99,7 @@ namespace ui {
         Icons::drawCaret(DIALOG_REGION.x + DIALOG_TEXT_OFFSET, DIALOG_REGION.y + 25 + 2, Context::color_scheme.GRAY, Direction::LEFT, CARET_SIZE);
         Icons::drawCaret(DIALOG_REGION.x + DIALOG_WIDTH - DIALOG_TEXT_OFFSET - CARET_SIZE, DIALOG_REGION.y + 25 + 2, Context::color_scheme.GRAY, Direction::RIGHT, CARET_SIZE);
 
-        bool is_exit = false;
+        volatile bool is_exit = false;
 
         std::function<void(E&)> joystick_handler = [&](E& e){
             if (e.JOYSTICK_STATE == JoystickState::LEFT) {
@@ -118,13 +118,13 @@ namespace ui {
             e.consume();
         };
 
-        Context::addEventListener(Event::JOYSTICK_DOWN, &joystick_handler);
+        Context::addEventListener(EventType::JOYSTICK_DOWN, &joystick_handler);
 
         printValue();
 
         while (!is_exit) {}
 
-        Context::removeEventListener(Event::JOYSTICK_DOWN, &joystick_handler);
+        Context::removeEventListener(EventType::JOYSTICK_DOWN, &joystick_handler);
 
         onExit();
 

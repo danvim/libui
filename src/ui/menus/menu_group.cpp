@@ -21,6 +21,9 @@ namespace ui {
     }
 
     int MenuGroup::run() {
+        is_exit = false;
+        onEnter();
+
         /**
          * Remember to set font pointer in Context.
          *
@@ -50,7 +53,7 @@ namespace ui {
             }
         };
 
-        Context::addEventListener(Event::JOYSTICK_DOWN, &joystick_handler);
+        Context::addEventListener(EventType::JOYSTICK_DOWN, &joystick_handler);
 
         while (!is_exit) {
             if (time != Context::getSystemTime()) {
@@ -74,9 +77,9 @@ namespace ui {
             }
         }
 
-        Context::removeEventListener(Event::JOYSTICK_DOWN, &joystick_handler);
-
         //Exit preparation
+        Context::removeEventListener(EventType::JOYSTICK_DOWN, &joystick_handler);
+        onExit();
 
         return 0;
     }
@@ -127,7 +130,7 @@ namespace ui {
         //Draw arrow
         Icons::drawCaret(
                 screen_ptr->getWidth() - PADDING,
-                CARET_OFFSET,
+                ui_region.y + CARET_OFFSET,
                 is_selected ? Context::color_scheme.PRIMARY : Context::color_scheme.GRAY,
                 graphics::RIGHT, 5
         );
@@ -170,9 +173,9 @@ namespace ui {
             MenuAction* menu_action = *menu_actions_it;
 
             menu_action->setRegion(
-                    this->ui_region.x,
-                    this->ui_region.y + TITLE_BAR_HEIGHT + ITEM_HEIGHT * i,
-                    this->ui_region.w - SCROLLBAR_WIDTH,
+                    0,
+                    TITLE_BAR_HEIGHT + ITEM_HEIGHT * i,
+                    screen_ptr->getWidth() - SCROLLBAR_WIDTH,
                     ITEM_HEIGHT
             );
 
